@@ -16,6 +16,8 @@ from controllers import PDController, OpenLoopController, MPCController, MPCCont
 from learning import KoopmanEigenfunctions, RBF, Edmd, Keedmd, KFKoopmanEigenfunctions, Kfdmd,KfNNdmd,KACFKoopmanEigenfunctions,KHLACFKoopmanEigenfunctions,KRHLACFKoopmanEigenfunctions,KSdmd,KMdmd,K2Mdmd,KFIMPKoopmanEigenfunctions
 ```
 Collect data and set parameters
+
+We defined the `CollectData` class for data collection and the `LinearPrediction` class for dynamics modeling.
 ```
 CD=CollectData()
 xx,uu,xxd,tt=CD.random_rollout()
