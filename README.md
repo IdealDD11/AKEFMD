@@ -1,4 +1,4 @@
-# Attention-based Koopman EigenFlow Mode Decomposition (AKEFMD)
+# Attention-based Koopman EigenFlow Mode Decomposition (AKEFMD and AKEFMD*)
 A Python library for simulating dynamics using Koopman operator theory and attention-based invertible neural network techniques.
 
 The code in this repository has been developed to implement the methodologies described in 
@@ -72,7 +72,7 @@ eigenfunction_basis.fit_diffeomorphism_model(X=xx, t=tt, X_d=xxd, l2=l2_diffeomo
 eigenfunction_basis.construct_basis(ub=upper_bounds, lb=lower_bounds)
 ```
 
-AKEFMD
+AKEFMD (Ours)
 ```
 eigenfunction_basis = KACFKoopmanEigenfunctions(n=n, max_power=eigenfunction_max_power, A_cl=A_cl, BK=BK)  
 eigenfunction_basis.build_diffeomorphism_model(jacobian_penalty=jacobian_penalty_diffeomorphism, n_hidden_layers = diff_n_hidden_layers, layer_width=diff_layer_width, batch_size= diff_batch_size, dropout_prob=diff_dropout_prob)
@@ -81,7 +81,7 @@ eigenfunction_basis.fit_diffeomorphism_model(X=xx, t=tt, X_d=xxd, l2=l2_diffeomo
 eigenfunction_basis.construct_basis(ub=upper_bounds, lb=lower_bounds)
 ```
 
-AKEFMD*
+AKEFMD* (Ours)
 ```
 eigenfunction_basis = KHLACFKoopmanEigenfunctions(n=n, max_power=eigenfunction_max_power, A_cl=A_cl, BK=BK)  
 eigenfunction_basis.build_diffeomorphism_model(jacobian_penalty=jacobian_penalty_diffeomorphism, n_hidden_layers = diff_n_hidden_layers, layer_width=diff_layer_width, batch_size= diff_batch_size, dropout_prob=diff_dropout_prob)
