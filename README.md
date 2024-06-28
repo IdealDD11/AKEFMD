@@ -9,7 +9,7 @@ M. Wang, X. Lou, B. Cui, J. Suykens, "An attention-based approach for Koopman mo
 The simulation framework of this method can be accessed via [KEEDMD](https://github.com/Cafolkes/keedmd).
 
 ## Running the code
-Import a custom python library
+Import custom python libraries
 ```
 from dynamics import LinearSystemDynamics
 from controllers import PDController, OpenLoopController, MPCController, MPCControllerDense
@@ -17,9 +17,6 @@ from learning import KoopmanEigenfunctions, RBF, Edmd, Keedmd, KFKoopmanEigenfun
 ```
 Collect data and set parameters
 ```
-from dynamics import LinearSystemDynamics
-from controllers import PDController, OpenLoopController, MPCController, MPCControllerDense
-from learning import KoopmanEigenfunctions, RBF, Edmd, Keedmd, KFKoopmanEigenfunctions, Kfdmd,KfNNdmd,KACFKoopmanEigenfunctions,KHLACFKoopmanEigenfunctions,KRHLACFKoopmanEigenfunctions,KSdmd,KMdmd,K2Mdmd,KFIMPKoopmanEigenfunctions
 CD=CollectData()
 xx,uu,xxd,tt=CD.random_rollout()
 ```
