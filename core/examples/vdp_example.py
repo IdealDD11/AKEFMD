@@ -27,138 +27,16 @@ import control
 from datetime import datetime
 import random as rand
 import scipy.sparse as sparse
+import CollectData
+import LinearPrediction
+
 
     
 """##############################"""
-### vdp system
-class CollectData():
-    
-    def __init__(self,Flag=0):
-        ### parameters
-        self.steps=0.01
-        self.nx=2
-        self.nu=1
-        self.time=5
-        self.nsim=int(self.time/self.steps)
-        self.ntraj=100    
-        self.flag=Flag
-        
-    def vdp(self, P, steps, sets):
-        if self.flag==0:      ### original data
-            x, y= P
-            # miu, lamda = sets
-            u =sets
-            dy = 2*(1-x**2)*y-x +u
-            y=y + dy * steps
-            dx = y
-        elif self.flag==1:    ### noise data
-            x, y= P
-            # miu, lamda = sets
-            u =sets
-            dy = 2*(1-x**2)*y-x +u+rand.gauss(0,0.02)
-            y=y + dy * steps
-            dx = y
-        elif self.flag==2:    ### linear data
-            x, y= P
-            # miu, lamda = sets
-            u =sets
-            dy = 2*y-x +u
-            y=y + dy * steps
-            dx = y 
-        elif self.flag==3:    ### uncontrolled data
-            x, y= P
-            # miu, lamda = sets
-            u =sets
-            dy = 2*y-x
-            y=y + dy * steps
-            dx = y 
-        return [x + dx * steps, y]
-    ### train data   
-    def random_rollout(self):
-        ##parameters
-        setss=4*np.random.rand(self.ntraj,self.nsim,self.nu)-2
-        xd = zeros((self.ntraj,self.nsim+1,self.nx))
-        t_eval = self.steps * arange(self.nsim + 1)
-        ##parameters
-        
-        ##position iteration
-        P0 = 4*np.random.rand(self.ntraj,self.nx)-2
-        d = []
-        tt=[]
-        for i in range(self.ntraj):
-            p0=P0[i]
-            ### other system
-            P1=[p0]
-            for j in range(self.nsim):
-                sets=setss[i,j,:]
-                p1 = self.vdp(p0, self.steps, sets)
-                P1.append(p1)
-                p0=p1
-            ### pendulum system
-            # P1=self.pend(p0,time,steps)
-            ### pend endx
-            d.append(P1)
-            tt.append(t_eval)
-        dnp = np.asarray(d,'float64')
-        tt=array(tt)
-        x=dnp
-        u=setss
-        return x, u,xd,tt
-    ###add batch size
-    def sample(self,batch_size):
-        ##paraneters
-        x, u= self.random_rollout()
-        ############################################################## old samples
-        ind=np.random.randint(0, self.nsim, size = batch_size)
-        i=np.random.randint(0, self.ntraj, size=1)
-        X,U,Y=[],[],[]
-        for j in ind:
-            x0=x[i,j,:]
-            x1=x[i,j+1,:]
-            u0=u[i,j,:]
-            X.append(x0)
-            U.append(u0)
-            Y.append(x1)
-        return np.array(X).reshape(batch_size, -1), np.array(U).reshape(batch_size, -1), np.array(Y).reshape(batch_size, -1) 
-    
+### vdp system    
 # ### test
 # CD=CollectData()
 # xx,uu,xxd,tt=CD.random_rollout()
-
-class LinearPrediction():
-    def __init__(self,A,B):
-        ### parameters
-        self.A=A
-        self.B=B
-        self.steps=0.01
-        self.nx=self.A.shape[0]
-        self.nu=self.B.shape[1]
-        self.Ad,self.Bd=self.descretize()        
-    def vdp(self, P, sets):
-        x, y= P
-        # miu, lamda = sets
-        u =sets
-        dy = 2*(1-x**2)*y-x +u
-        y=y + dy * self.steps
-        dx = y
-        return [x + dx * self.steps, y]
-    def predict(self,x0,u,nsim):
-        x1=[x0]
-        for i in range(nsim):
-            x1.append(dot(self.Ad,x0)+self.Bd*u[0,i])
-            x0=x1[-1]
-        return array(x1).squeeze()    
-    def predict_true(self,x0,u,nsim):
-        x1_true=[x0]
-        for i in range(nsim):
-            x1_true.append(self.vdp(x0,u[0,i]))
-            x0=x1_true[-1]
-        return array(x1_true).squeeze()
-    def descretize(self):     
-        Ad=np.eye(self.nx)+self.A*self.steps
-        Bd=self.B*self.steps
-        return Ad,Bd
-
     
 # ### test
 # A =  array([[0., 1.], [-1., 2.]])
